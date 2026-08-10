@@ -1,0 +1,468 @@
+
+import React, { useState } from "react";
+import {
+  MapPin,
+  ArrowRight,
+  Home,
+  CheckCircle2,
+  X,
+  Phone,
+} from "lucide-react";
+
+import {
+  getAvailableUnits,
+  getProjectStatus,
+} from "../data/projects";
+
+import type {
+  PropertyProject,
+} from "../data/projects";
+
+interface ProjectCardProps {
+  project: PropertyProject;
+}
+
+export const ProjectCard: React.FC<ProjectCardProps> = ({
+  project,
+}) => {
+  const availableUnits = getAvailableUnits(project);
+  const projectStatus = getProjectStatus(project);
+
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const statusLabel = {
+    AVAILABLE: "Unit Tersedia",
+    SOLD_OUT: "Sold Out",
+    COMING_SOON: "Segera Hadir",
+  }[projectStatus];
+
+  const soldPercentage =
+    project.totalUnits > 0
+      ? Math.min(
+          Math.round(
+            (project.soldUnits / project.totalUnits) * 100
+          ),
+          100
+        )
+      : 0;
+
+  const mainImage = project.images[0];
+
+  const openDetail = () => {
+    setCurrentImageIndex(0);
+    setIsDetailOpen(true);
+  };
+
+  const closeDetail = () => {
+    setIsDetailOpen(false);
+  };
+
+  return (
+    <>
+      {/* ========================================
+          PROJECT CARD
+      ======================================== */}
+
+      <article className="project-card">
+
+        {/* ========================================
+            FOTO PROJECT
+        ======================================== */}
+
+        <div className="project-card__image">
+          {mainImage ? (
+            <img
+              src={mainImage}
+              alt={project.name}
+            />
+          ) : (
+            <div>Foto Project</div>
+          )}
+
+          {/* STATUS */}
+          <span
+            className={`project-card__status project-card__status--${projectStatus.toLowerCase()}`}
+          >
+            {statusLabel}
+          </span>
+
+          {/* JUMLAH FOTO */}
+          {project.images.length > 1 && (
+            <span className="project-card__photo-count">
+              {project.images.length} Foto
+            </span>
+          )}
+        </div>
+
+        {/* ========================================
+            CONTENT
+        ======================================== */}
+
+        <div className="project-card__content">
+          <h3>{project.name}</h3>
+
+          <div className="project-card__location">
+            <MapPin size={17} />
+            <span>{project.location}</span>
+          </div>
+
+          {/* PRICE */}
+          <div className="project-card__price">
+            <span>Harga mulai</span>
+            <strong>{project.price}</strong>
+          </div>
+
+          {/* INSTALLMENT */}
+          <div className="project-card__installment">
+            <span>Cicilan</span>
+            <strong>{project.installment}</strong>
+          </div>
+
+          {/* ========================================
+              UNIT INFO
+          ======================================== */}
+
+          <div className="project-card__units">
+            <div>
+              <span>Total Unit</span>
+              <strong>{project.totalUnits}</strong>
+            </div>
+
+            <div>
+              <span>Terjual</span>
+              <strong>{project.soldUnits}</strong>
+            </div>
+
+            <div>
+              <span>Tersedia</span>
+              <strong>{availableUnits}</strong>
+            </div>
+          </div>
+
+          {/* ========================================
+              PROGRESS PENJUALAN
+          ======================================== */}
+
+          <div className="project-card__progress">
+            <div className="project-card__progress-header">
+              <span>Progress Penjualan</span>
+              <strong>{soldPercentage}%</strong>
+            </div>
+
+            <div className="project-card__progress-track">
+              <div
+                className="project-card__progress-bar"
+                style={{
+                  width: `${soldPercentage}%`,
+                }}
+              />
+            </div>
+          </div>
+
+          {/* ========================================
+              DESCRIPTION
+          ======================================== */}
+
+          {project.description && (
+            <p className="project-card__description">
+              {project.description}
+            </p>
+          )}
+
+          {/* ========================================
+              TRUST POINT
+          ======================================== */}
+
+          <div className="project-card__trust">
+            <CheckCircle2 size={16} />
+
+            <span>
+              Proses KPR didampingi tim Borneo Real Properti
+            </span>
+          </div>
+
+          {/* ========================================
+              BUTTON
+          ======================================== */}
+
+          <button
+            type="button"
+            className="project-card__button"
+            onClick={openDetail}
+          >
+            Lihat Detail
+            <ArrowRight size={17} />
+          </button>
+        </div>
+      </article>
+
+      {/* ========================================
+          PROJECT DETAIL MODAL
+      ======================================== */}
+
+      {isDetailOpen && (
+        <div
+          className="project-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Detail project ${project.name}`}
+          onClick={closeDetail}
+        >
+
+          {/* ========================================
+              MODAL CONTENT
+          ======================================== */}
+
+          <div
+            className="project-modal__content"
+            onClick={(event) => event.stopPropagation()}
+          >
+
+            {/* CLOSE BUTTON */}
+
+            <button
+              type="button"
+              className="project-modal__close"
+              onClick={closeDetail}
+              aria-label="Tutup detail project"
+            >
+              <X size={22} />
+            </button>
+
+            {/* ========================================
+                IMAGE CAROUSEL
+            ======================================== */}
+
+            <div
+  className="project-modal__image"
+  style={{
+    position: "relative",
+    isolation: "isolate",
+    background: "#fff",
+  }}
+>
+
+              {project.images.length > 0 ? (
+                <>
+                  <img
+                    src={project.images[currentImageIndex]}
+                    alt={`${project.name} - Foto ${
+                      currentImageIndex + 1
+                    }`}
+                  />
+
+                  {/* NAVIGATION */}
+
+                  {project.images.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        className="project-modal__nav project-modal__nav--prev"
+                        onClick={() =>
+                          setCurrentImageIndex((prev) =>
+                            prev === 0
+                              ? project.images.length - 1
+                              : prev - 1
+                          )
+                        }
+                        aria-label="Foto sebelumnya"
+                      >
+                        ←
+                      </button>
+
+                      <button
+                        type="button"
+                        className="project-modal__nav project-modal__nav--next"
+                        onClick={() =>
+                          setCurrentImageIndex((prev) =>
+                            prev ===
+                            project.images.length - 1
+                              ? 0
+                              : prev + 1
+                          )
+                        }
+                        aria-label="Foto berikutnya"
+                      >
+                        →
+                      </button>
+
+                      <div className="project-modal__counter">
+                        {currentImageIndex + 1} /{" "}
+                        {project.images.length}
+                      </div>
+                    </>
+                  )}
+                </>
+              ) : (
+                <div>Foto Project</div>
+              )}
+
+              {/* STATUS */}
+
+              <span
+                className={`project-card__status project-card__status--${projectStatus.toLowerCase()}`}
+              >
+                {statusLabel}
+              </span>
+            </div>
+
+            {/* ========================================
+                MODAL BODY
+            ======================================== */}
+
+            <div className="project-modal__body">
+
+              <span className="project-modal__eyebrow">
+                PROJECT PERUMAHAN
+              </span>
+
+              <h2>{project.name}</h2>
+
+              <div className="project-modal__location">
+                <MapPin size={18} />
+                <span>{project.location}</span>
+              </div>
+
+              {/* PRICE & INSTALLMENT */}
+
+              <div className="project-modal__highlight">
+                <div>
+                  <span>Harga mulai</span>
+                  <strong>{project.price}</strong>
+                </div>
+
+                <div>
+                  <span>Cicilan</span>
+                  <strong>{project.installment}</strong>
+                </div>
+              </div>
+
+              {/* UNIT STATS */}
+
+              <div className="project-modal__stats">
+                <div>
+                  <span>Total Unit</span>
+                  <strong>{project.totalUnits}</strong>
+                </div>
+
+                <div>
+                  <span>Terjual</span>
+                  <strong>{project.soldUnits}</strong>
+                </div>
+
+                <div>
+                  <span>Tersedia</span>
+                  <strong>{availableUnits}</strong>
+                </div>
+              </div>
+
+              {/* PROGRESS */}
+
+              <div className="project-modal__progress">
+                <div>
+                  <span>Progress Penjualan</span>
+                  <strong>{soldPercentage}%</strong>
+                </div>
+
+                <div className="project-modal__progress-track">
+                  <div
+                    className="project-modal__progress-bar"
+                    style={{
+                      width: `${soldPercentage}%`,
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* DESCRIPTION */}
+
+              {project.description && (
+                <div className="project-modal__section">
+                  <h3>Tentang Project</h3>
+
+                  <p>
+                    {project.description}
+                  </p>
+                </div>
+              )}
+
+              {/* SPECIFICATIONS */}
+
+              {project.specifications &&
+                project.specifications.length > 0 && (
+                  <div className="project-modal__section">
+                    <h3>Spesifikasi</h3>
+
+                    <ul>
+                      {project.specifications.map(
+                        (item) => (
+                          <li key={item}>
+                            <CheckCircle2 size={16} />
+                            <span>{item}</span>
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                )}
+
+              {/* FACILITIES */}
+
+              {project.facilities &&
+                project.facilities.length > 0 && (
+                  <div className="project-modal__section">
+                    <h3>Fasilitas</h3>
+
+                    <ul>
+                      {project.facilities.map(
+                        (item) => (
+                          <li key={item}>
+                            <CheckCircle2 size={16} />
+                            <span>{item}</span>
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                )}
+
+              {/* TRUST */}
+
+              <div className="project-modal__trust">
+                <Home size={19} />
+
+                <div>
+                  <strong>
+                    Didampingi Sampai Akad
+                  </strong>
+
+                  <span>
+                    Tim Borneo Real Properti membantu
+                    proses KPR hingga serah terima kunci.
+                  </span>
+                </div>
+              </div>
+
+              {/* WHATSAPP */}
+
+              <a
+                href={`https://api.whatsapp.com/send?phone=6285845585994&text=${encodeURIComponent(
+                  `Halo Borneo Real Properti, saya tertarik dengan project ${project.name}. Saya ingin mendapatkan informasi lebih lanjut.`
+                )}`}
+                className="project-modal__whatsapp"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Phone size={19} />
+                Konsultasi Project Ini
+              </a>
+
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+

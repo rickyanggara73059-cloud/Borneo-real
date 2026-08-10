@@ -76,10 +76,10 @@ const App: React.FC = () => {
               </span>
 
               <h1>
-                Rumah Impian
-                <br />
-                <span>Untuk Keluarga Anda</span>
-              </h1>
+  Rumah Subsidi Pontianak
+  <br />
+  <span>Untuk Keluarga Anda</span>
+</h1>
 
               <p>
                 Pilihan rumah subsidi dengan lokasi strategis,

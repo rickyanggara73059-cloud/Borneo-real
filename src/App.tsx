@@ -12,13 +12,14 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-
 const whatsappUrl =
   "https://api.whatsapp.com/send?phone=6285845585994&text=...";
 
 const App: React.FC = () => {
 
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [activeMenu, setActiveMenu] = useState("beranda");
+
 
   return (
     <>
@@ -47,14 +48,6 @@ const App: React.FC = () => {
   <a href="#kontak">Kontak</a>
 </div>
 
-            <a
-              href={whatsappUrl}
-              className="navbar__cta"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Konsultasi
-            </a>
           </div>
         </nav>
       </header>
@@ -93,40 +86,19 @@ const App: React.FC = () => {
                 >
                   Lihat Project
                 </a>
-
-                <a
-                  href={whatsappUrl}
-                  className="hero__button hero__button--secondary"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Tanya via WhatsApp
-                </a>
               </div>
             </div>
 
             {/* FOTO HERO */}
             <div className="hero__visual">
               <img
-                src="/images/projects/permata-alam-lestari-2/pal 2.webp"
-                alt="Rumah subsidi Permata Alam Lestari 2"
-                className="hero__image"
-              />
+  src="/images/hero/hero.jpeg"
+  alt="Borneo Real Properti"
+  className="hero__image"
+/>
 
-              <div className="hero__visual-card">
-                <span>Harga mulai</span>
-                <strong>Rp182 jutaan</strong>
-                <small>
-                  Cicilan mulai 1 jutaan / bulan
-                </small>
-              </div>
 
-              <div className="hero__location-badge">
-                <span>PROJECT UNGGULAN</span>
-                <strong>
-                  Permata Alam Lestari 2
-                </strong>
-              </div>
+              
             </div>
 
           </div>
@@ -167,14 +139,6 @@ const App: React.FC = () => {
         serah terima kunci.
       </p>
 
-      <a
-        href={whatsappUrl}
-        className="about-section__button"
-        target="_blank"
-        rel="noreferrer"
-      >
-        Konsultasi dengan Tim Kami
-      </a>
     </div>
 
     <div className="about-section__trust">
@@ -766,23 +730,28 @@ const App: React.FC = () => {
     </div>
 
     {/* CONTACT */}
-    <div className="site-footer__contact">
-      <h4>Hubungi Kami</h4>
+   <div className="site-footer__contact">
+  <h4>Hubungi Kami</h4>
 
-      <p>
-        Konsultasikan kebutuhan rumah Anda
-        bersama tim Borneo Real Properti.
-      </p>
+  <p>
+    Konsultasikan kebutuhan rumah Anda
+    bersama tim Borneo Real Properti.
+  </p>
 
-      <a
-        href={whatsappUrl}
-        target="_blank"
-        rel="noreferrer"
-        className="site-footer__button"
-      >
-        Konsultasi via WhatsApp
-      </a>
-    </div>
+  <a
+    href="https://www.instagram.com/borneorealproperti?igsh=MjR0MGQwOHBhZm85"
+    target="_blank"
+    rel="noreferrer"
+    className="site-footer__instagram"
+  >
+   <span className="site-footer__social-icon">
+  <span className="site-footer__instagram-logo">
+    <span className="site-footer__instagram-dot" /> 
+  </span>
+</span>
+ <span>Instagram</span>
+  </a>
+</div>
 
   </div>
 

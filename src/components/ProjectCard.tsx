@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   MapPin,
@@ -7,55 +6,96 @@ import {
   CheckCircle2,
   X,
   Phone,
+  BedDouble,
+  Ruler,
+  Zap,
+  Sofa,
+  Bath,
+  Building2,
 } from "lucide-react";
 
-import {
-  getAvailableUnits,
-  getProjectStatus,
-} from "../data/projects";
-
-import type {
-  PropertyProject,
-} from "../data/projects";
+import type { PropertyProject } from "../data/projects";
 
 interface ProjectCardProps {
   project: PropertyProject;
 }
 
+/* ========================================
+   ICON SPESIFIKASI
+======================================== */
+
+const specificationIcons: Record<
+  string,
+  React.ComponentType<{
+    size?: number;
+    strokeWidth?: number;
+  }>
+> = {
+  bedroom: BedDouble,
+  land: Ruler,
+  electricity: Zap,
+  building: Building2,
+  livingRoom: Sofa,
+  bathroom: Bath,
+  units: Building2,
+};
+
+/* ========================================
+   PROJECT CARD
+======================================== */
+
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
 }) => {
-  const availableUnits = getAvailableUnits(project);
-  const projectStatus = getProjectStatus(project);
+  const [isDetailOpen, setIsDetailOpen] =
+    useState(false);
 
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const statusLabel = {
-    AVAILABLE: "Unit Tersedia",
-    SOLD_OUT: "Sold Out",
-    COMING_SOON: "Segera Hadir",
-  }[projectStatus];
-
-  const soldPercentage =
-    project.totalUnits > 0
-      ? Math.min(
-          Math.round(
-            (project.soldUnits / project.totalUnits) * 100
-          ),
-          100
-        )
-      : 0;
+  const [currentImageIndex, setCurrentImageIndex] =
+    useState(0);
 
   const mainImage = project.images[0];
+
+  /* ========================================
+     OPEN DETAIL
+  ======================================== */
 
   const openDetail = () => {
     setCurrentImageIndex(0);
     setIsDetailOpen(true);
+    document.body.style.overflow = "hidden";
   };
+
+  /* ========================================
+     CLOSE DETAIL
+  ======================================== */
 
   const closeDetail = () => {
     setIsDetailOpen(false);
+    document.body.style.overflow = "";
+  };
+
+  /* ========================================
+     NEXT IMAGE
+  ======================================== */
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) =>
+      prev === project.images.length - 1
+        ? 0
+        : prev + 1
+    );
+  };
+
+  /* ========================================
+     PREVIOUS IMAGE
+  ======================================== */
+
+  const previousImage = () => {
+    setCurrentImageIndex((prev) =>
+      prev === 0
+        ? project.images.length - 1
+        : prev - 1
+    );
   };
 
   return (
@@ -66,9 +106,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
       <article className="project-card">
 
-        {/* ========================================
-            FOTO PROJECT
-        ======================================== */}
+        {/* FOTO PROJECT */}
 
         <div className="project-card__image">
           {mainImage ? (
@@ -80,14 +118,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             <div>Foto Project</div>
           )}
 
-          {/* STATUS */}
-          <span
-            className={`project-card__status project-card__status--${projectStatus.toLowerCase()}`}
-          >
-            {statusLabel}
-          </span>
-
           {/* JUMLAH FOTO */}
+
           {project.images.length > 1 && (
             <span className="project-card__photo-count">
               {project.images.length} Foto
@@ -100,63 +132,44 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         ======================================== */}
 
         <div className="project-card__content">
+
+          {/* NAMA PROJECT */}
+
           <h3>{project.name}</h3>
+
+          {/* LOKASI */}
 
           <div className="project-card__location">
             <MapPin size={17} />
-            <span>{project.location}</span>
-          </div>
 
-          {/* PRICE */}
-          <div className="project-card__price">
-            <span>Harga mulai</span>
-            <strong>{project.price}</strong>
-          </div>
-
-          {/* INSTALLMENT */}
-          <div className="project-card__installment">
-            <span>Cicilan</span>
-            <strong>{project.installment}</strong>
+            <span>
+              {project.location}
+            </span>
           </div>
 
           {/* ========================================
-              UNIT INFO
+              PRICE
+          ======================================== */}
+
+          <div className="project-card__price">
+            <span>Harga mulai</span>
+
+            <strong>
+              {project.price}
+            </strong>
+          </div>
+
+          {/* ========================================
+              TOTAL UNIT
           ======================================== */}
 
           <div className="project-card__units">
             <div>
               <span>Total Unit</span>
-              <strong>{project.totalUnits}</strong>
-            </div>
 
-            <div>
-              <span>Terjual</span>
-              <strong>{project.soldUnits}</strong>
-            </div>
-
-            <div>
-              <span>Tersedia</span>
-              <strong>{availableUnits}</strong>
-            </div>
-          </div>
-
-          {/* ========================================
-              PROGRESS PENJUALAN
-          ======================================== */}
-
-          <div className="project-card__progress">
-            <div className="project-card__progress-header">
-              <span>Progress Penjualan</span>
-              <strong>{soldPercentage}%</strong>
-            </div>
-
-            <div className="project-card__progress-track">
-              <div
-                className="project-card__progress-bar"
-                style={{
-                  width: `${soldPercentage}%`,
-                }}
-              />
+              <strong>
+                {project.totalUnits} Unit
+              </strong>
             </div>
           </div>
 
@@ -175,11 +188,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           ======================================== */}
 
           <div className="project-card__trust">
+
             <CheckCircle2 size={16} />
 
             <span>
-              Proses KPR didampingi tim Borneo Real Properti
+              Proses KPR didampingi tim
+              Borneo Real Properti
             </span>
+
           </div>
 
           {/* ========================================
@@ -192,8 +208,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             onClick={openDetail}
           >
             Lihat Detail
+
             <ArrowRight size={17} />
           </button>
+
         </div>
       </article>
 
@@ -216,10 +234,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
           <div
             className="project-modal__content"
-            onClick={(event) => event.stopPropagation()}
+            onClick={(event) =>
+              event.stopPropagation()
+            }
           >
 
-            {/* CLOSE BUTTON */}
+            {/* ========================================
+                CLOSE BUTTON
+            ======================================== */}
 
             <button
               type="button"
@@ -235,18 +257,22 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             ======================================== */}
 
             <div
-  className="project-modal__image"
-  style={{
-    position: "relative",
-    isolation: "isolate",
-    background: "#fff",
-  }}
->
+              className="project-modal__image"
+              style={{
+                position: "relative",
+                isolation: "isolate",
+                background: "#fff",
+              }}
+            >
 
               {project.images.length > 0 ? (
                 <>
                   <img
-                    src={project.images[currentImageIndex]}
+                    src={
+                      project.images[
+                        currentImageIndex
+                      ]
+                    }
                     alt={`${project.name} - Foto ${
                       currentImageIndex + 1
                     }`}
@@ -256,55 +282,44 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
                   {project.images.length > 1 && (
                     <>
+                      {/* PREVIOUS */}
+
                       <button
                         type="button"
                         className="project-modal__nav project-modal__nav--prev"
-                        onClick={() =>
-                          setCurrentImageIndex((prev) =>
-                            prev === 0
-                              ? project.images.length - 1
-                              : prev - 1
-                          )
-                        }
+                        onClick={previousImage}
                         aria-label="Foto sebelumnya"
                       >
                         ←
                       </button>
 
+                      {/* NEXT */}
+
                       <button
                         type="button"
                         className="project-modal__nav project-modal__nav--next"
-                        onClick={() =>
-                          setCurrentImageIndex((prev) =>
-                            prev ===
-                            project.images.length - 1
-                              ? 0
-                              : prev + 1
-                          )
-                        }
+                        onClick={nextImage}
                         aria-label="Foto berikutnya"
                       >
                         →
                       </button>
 
+                      {/* COUNTER */}
+
                       <div className="project-modal__counter">
-                        {currentImageIndex + 1} /{" "}
+                        {currentImageIndex + 1}
+                        {" / "}
                         {project.images.length}
                       </div>
                     </>
                   )}
                 </>
               ) : (
-                <div>Foto Project</div>
+                <div>
+                  Foto Project
+                </div>
               )}
 
-              {/* STATUS */}
-
-              <span
-                className={`project-card__status project-card__status--${projectStatus.toLowerCase()}`}
-              >
-                {statusLabel}
-              </span>
             </div>
 
             {/* ========================================
@@ -313,138 +328,225 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
             <div className="project-modal__body">
 
+              {/* EYEBROW */}
+
               <span className="project-modal__eyebrow">
                 PROJECT PERUMAHAN
               </span>
 
-              <h2>{project.name}</h2>
+              {/* NAME */}
+
+              <h2>
+                {project.name}
+              </h2>
+
+              {/* LOCATION */}
 
               <div className="project-modal__location">
+
                 <MapPin size={18} />
-                <span>{project.location}</span>
+
+                <span>
+                  {project.location}
+                </span>
+
               </div>
 
-              {/* PRICE & INSTALLMENT */}
+              {/* ========================================
+                  HIGHLIGHT
+              ======================================== */}
 
               <div className="project-modal__highlight">
+
                 <div>
-                  <span>Harga mulai</span>
-                  <strong>{project.price}</strong>
+                  <span>
+                    Harga mulai
+                  </span>
+
+                  <strong>
+                    {project.price}
+                  </strong>
                 </div>
 
                 <div>
-                  <span>Cicilan</span>
-                  <strong>{project.installment}</strong>
+                  <span>
+                    Total Unit
+                  </span>
+
+                  <strong>
+                    {project.totalUnits} Unit
+                  </strong>
                 </div>
+
               </div>
 
-              {/* UNIT STATS */}
-
-              <div className="project-modal__stats">
-                <div>
-                  <span>Total Unit</span>
-                  <strong>{project.totalUnits}</strong>
-                </div>
-
-                <div>
-                  <span>Terjual</span>
-                  <strong>{project.soldUnits}</strong>
-                </div>
-
-                <div>
-                  <span>Tersedia</span>
-                  <strong>{availableUnits}</strong>
-                </div>
-              </div>
-
-              {/* PROGRESS */}
-
-              <div className="project-modal__progress">
-                <div>
-                  <span>Progress Penjualan</span>
-                  <strong>{soldPercentage}%</strong>
-                </div>
-
-                <div className="project-modal__progress-track">
-                  <div
-                    className="project-modal__progress-bar"
-                    style={{
-                      width: `${soldPercentage}%`,
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* DESCRIPTION */}
+              {/* ========================================
+                  DESCRIPTION
+              ======================================== */}
 
               {project.description && (
                 <div className="project-modal__section">
-                  <h3>Tentang Project</h3>
+
+                  <h3>
+                    Tentang Project
+                  </h3>
 
                   <p>
                     {project.description}
                   </p>
+
                 </div>
               )}
 
-              {/* SPECIFICATIONS */}
+                {/* ========================================
+    BLOK PROJECT
+======================================== */}
+
+{project.blocks &&
+  project.blocks.length > 0 && (
+    <div className="project-modal__section">
+      <h3>Blok Project</h3>
+
+      <div className="project-modal__blocks">
+        {project.blocks.map((block) => (
+          <div
+            className="project-modal__block"
+            key={block.name}
+          >
+            <div>
+              <strong>{block.name}</strong>
+              <span>{block.landArea}</span>
+            </div>
+
+            <div className="project-modal__block-units">
+              <span>Jumlah Unit</span>
+              <strong>{block.units} Unit</strong>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+  
+              {/* ========================================
+                  SPECIFICATIONS
+              ======================================== */}
 
               {project.specifications &&
                 project.specifications.length > 0 && (
                   <div className="project-modal__section">
-                    <h3>Spesifikasi</h3>
 
-                    <ul>
+                    <h3>
+                      Spesifikasi Rumah
+                    </h3>
+
+                    <div className="project-specifications">
+
                       {project.specifications.map(
-                        (item) => (
-                          <li key={item}>
-                            <CheckCircle2 size={16} />
-                            <span>{item}</span>
-                          </li>
-                        )
+                        (item) => {
+
+                          const Icon =
+                            specificationIcons[
+                              item.icon
+                            ] || CheckCircle2;
+
+                          return (
+                            <div
+                              className="project-specification"
+                              key={`${item.label}-${item.value}`}
+                            >
+
+                              <div className="project-specification__icon">
+                                <Icon
+                                  size={22}
+                                  strokeWidth={1.8}
+                                />
+                              </div>
+
+                              <div className="project-specification__content">
+
+                                <span>
+                                  {item.label}
+                                </span>
+
+                                <strong>
+                                  {item.value}
+                                </strong>
+
+                              </div>
+
+                            </div>
+                          );
+                        }
                       )}
-                    </ul>
+
+                    </div>
+
                   </div>
                 )}
 
-              {/* FACILITIES */}
+              {/* ========================================
+                  FACILITIES
+              ======================================== */}
 
               {project.facilities &&
                 project.facilities.length > 0 && (
                   <div className="project-modal__section">
-                    <h3>Fasilitas</h3>
+
+                    <h3>
+                      Fasilitas
+                    </h3>
 
                     <ul>
+
                       {project.facilities.map(
                         (item) => (
                           <li key={item}>
-                            <CheckCircle2 size={16} />
-                            <span>{item}</span>
+
+                            <CheckCircle2
+                              size={16}
+                            />
+
+                            <span>
+                              {item}
+                            </span>
+
                           </li>
                         )
                       )}
+
                     </ul>
+
                   </div>
                 )}
 
-              {/* TRUST */}
+              {/* ========================================
+                  TRUST
+              ======================================== */}
 
               <div className="project-modal__trust">
+
                 <Home size={19} />
 
                 <div>
+
                   <strong>
                     Didampingi Sampai Akad
                   </strong>
 
                   <span>
-                    Tim Borneo Real Properti membantu
-                    proses KPR hingga serah terima kunci.
+                    Tim Borneo Real Properti
+                    membantu proses KPR hingga
+                    serah terima kunci.
                   </span>
+
                 </div>
+
               </div>
 
-              {/* WHATSAPP */}
+              {/* ========================================
+                  WHATSAPP
+              ======================================== */}
 
               <a
                 href={`https://api.whatsapp.com/send?phone=6285845585994&text=${encodeURIComponent(
@@ -454,8 +556,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                 target="_blank"
                 rel="noreferrer"
               >
+
                 <Phone size={19} />
+
                 Konsultasi Project Ini
+
               </a>
 
             </div>
@@ -465,4 +570,3 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     </>
   );
 };
-

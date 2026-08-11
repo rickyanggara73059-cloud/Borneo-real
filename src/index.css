@@ -2,25 +2,33 @@
 
 :root {
   font-family: "DM Sans", sans-serif;
-  color: #18251f;
-  background: #f8faf8;
+
+  color: #001323;
+  background: #f7f8fa;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 
-  --brand: #1f6b4f;
-  --brand-dark: #154b38;
-  --brand-light: #eaf5ef;
+  /* ========================================
+     BRL PREMIUM COLOR SYSTEM
+  ======================================== */
 
-  --accent: #d9a441;
-  --text: #18251f;
-  --text-soft: #64736b;
+  --brand: #001323;
+  --brand-dark: #000c18;
+  --brand-light: #eaf0f5;
+
+  --accent: #f5b82e;
+  --accent-light: #fff4d6;
+
+  --text: #001323;
+  --text-soft: #64748b;
 
   --white: #ffffff;
-  --surface: #f8faf8;
-  --border: #e4ebe7;
+  --surface: #f7f8fa;
+  --border: #e3e8ed;
 
-  --shadow-sm: 0 8px 25px rgba(24, 37, 31, 0.07);
-  --shadow-md: 0 18px 45px rgba(24, 37, 31, 0.11);
+  --shadow-sm: 0 8px 25px rgba(0, 19, 35, 0.07);
+  --shadow-md: 0 18px 45px rgba(0, 19, 35, 0.11);
 
   --container: 1180px;
 }

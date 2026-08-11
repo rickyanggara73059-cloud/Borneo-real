@@ -12,8 +12,6 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-const whatsappUrl =
-  "https://api.whatsapp.com/send?phone=6285845585994&text=...";
 
 const App: React.FC = () => {
 
@@ -39,13 +37,63 @@ const App: React.FC = () => {
        </a>
 
             <div className="navbar__menu">
-  <a href="#beranda">Beranda</a>
-  <a href="#keunggulan">Keunggulan</a>
-  <a href="#tentang">Tentang Kami</a>
-  <a href="#project">Project</a>
-  <a href="#proses">Proses</a>
-  <a href="#faq">FAQ</a>
-  <a href="#kontak">Kontak</a>
+
+  <a
+    href="#beranda"
+    className={activeMenu === "beranda" ? "active" : ""}
+    onClick={() => setActiveMenu("beranda")}
+  >
+    Beranda
+  </a>
+
+  <a
+    href="#keunggulan"
+    className={activeMenu === "keunggulan" ? "active" : ""}
+    onClick={() => setActiveMenu("keunggulan")}
+  >
+    Keunggulan
+  </a>
+
+  <a
+    href="#tentang"
+    className={activeMenu === "tentang" ? "active" : ""}
+    onClick={() => setActiveMenu("tentang")}
+  >
+    Tentang Kami
+  </a>
+
+  <a
+    href="#project"
+    className={activeMenu === "project" ? "active" : ""}
+    onClick={() => setActiveMenu("project")}
+  >
+    Project
+  </a>
+
+  <a
+    href="#proses"
+    className={activeMenu === "proses" ? "active" : ""}
+    onClick={() => setActiveMenu("proses")}
+  >
+    Proses
+  </a>
+
+  <a
+    href="#faq"
+    className={activeMenu === "faq" ? "active" : ""}
+    onClick={() => setActiveMenu("faq")}
+  >
+    FAQ
+  </a>
+
+  <a
+    href="#kontak"
+    className={activeMenu === "kontak" ? "active" : ""}
+    onClick={() => setActiveMenu("kontak")}
+  >
+    Kontak
+  </a>
+
 </div>
 
           </div>

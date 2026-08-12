@@ -786,6 +786,10 @@ const App: React.FC = () => {
     bersama tim Borneo Real Properti.
   </p>
 
+  <p className="site-footer__address">
+  Jalan M. Yamin No. 22, Pontianak
+</p>
+
   <a
     href="https://www.instagram.com/borneorealproperti?igsh=MjR0MGQwOHBhZm85"
     target="_blank"

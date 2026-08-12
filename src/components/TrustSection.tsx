@@ -95,7 +95,7 @@ export const TrustSection: React.FC = () => {
           </div>
 
           <div>
-            <strong>2–3 Bulan</strong>
+            <strong>1 Bulan</strong>
             <span>Estimasi proses</span>
           </div>
         </div>

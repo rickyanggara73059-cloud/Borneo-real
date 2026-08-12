@@ -1032,6 +1032,13 @@
   line-height: 1.75;
 }
 
+.site-footer__address {
+  margin-top: 12px !important;
+  color: rgba(255, 255, 255, 0.78) !important;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
 /* ========================================
    INSTAGRAM
 ======================================== */

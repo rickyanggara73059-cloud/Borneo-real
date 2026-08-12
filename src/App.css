@@ -7,14 +7,7 @@
   top: 0;
   z-index: 1000;
 
-background: linear-gradient(
-  120deg,
-  #0B2740 0%,
-  #123B5D 60%,
-  #1B3D54 78%,
-  #3D3A29 90%,
-  #6B5425 100%
-);
+  background: #0B2740;
 
   border-bottom: 1px solid rgba(245, 184, 46, 0.18);
 
@@ -546,13 +539,7 @@ background: linear-gradient(
       rgba(245, 184, 46, 0.12),
       transparent 28%
     ),
-    linear-gradient(
-      135deg,
-      #0B2740 0%,
-      #123B5D 55%,
-      #4F3D1D 82%,
-      #6B5120 100%
-    );
+    #0B2740;
 
   color: white;
   overflow: hidden;
@@ -3974,14 +3961,14 @@ background: linear-gradient(
   overflow: hidden;
 
   background:
-  linear-gradient(
-    90deg,
-    rgba(11, 39, 64, 0.78) 0%,
-    rgba(11, 39, 64, 0.58) 40%,
-    rgba(11, 39, 64, 0.25) 72%,
-    rgba(11, 39, 64, 0.08) 100%
-  ),
-  url("/images/projects/permata-alam-lestari-2/pal 2.webp");
+    linear-gradient(
+      90deg,
+      rgba(0, 19, 35, 0.96) 0%,
+      rgba(0, 19, 35, 0.90) 35%,
+      rgba(0, 19, 35, 0.78) 65%,
+      rgba(0, 19, 35, 0.86) 100%
+    ),
+    url("/images/projects/permata-alam-lestari-2/pal 2.webp");
 
   background-size: cover;
   background-position: center;
